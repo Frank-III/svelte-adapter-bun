@@ -34,12 +34,17 @@
       "types": "./index.d.ts",
       "import": "./dist/index.js"
     },
+    "./vite": {
+      "types": "./vite.d.ts",
+      "import": "./dist/vite.js"
+    },
     "./package.json": "./package.json"
   },
   "types": "index.d.ts",
   "files": [
     "dist",
     "index.d.ts",
+    "vite.d.ts",
     "ambient.d.ts"
   ],
   "devDependencies": {

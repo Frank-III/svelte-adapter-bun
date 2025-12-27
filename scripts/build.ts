@@ -14,6 +14,17 @@ await build({
 });
 console.timeEnd('Build: adapter');
 
+console.time('Build: vite plugin');
+await build({
+  entrypoints: ['./vite.ts'],
+  outdir: 'dist',
+  packages: 'external',
+  target: 'node',
+  format: 'esm',
+  minify: true,
+});
+console.timeEnd('Build: vite plugin');
+
 console.time('Build: server');
 await build({
   entrypoints: ['./src/index.ts', './src/handler.ts', './src/env.ts'],

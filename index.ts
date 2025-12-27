@@ -1,5 +1,4 @@
 import type { Adapter, Builder } from '@sveltejs/kit';
-import type { Plugin } from 'vite';
 import { rolldown } from 'rolldown';
 
 interface AdapterOptions {
@@ -9,47 +8,7 @@ interface AdapterOptions {
   serveAssets?: boolean;
 }
 
-// Lazy evaluation to avoid "Bun is not defined" when importing bunVitePlugin in Node.js
 const getFilesPath = () => Bun.fileURLToPath(new URL('./files', import.meta.url));
-
-/**
- * Vite plugin to handle Bun-specific modules during development and build.
- * Add this to your vite.config.ts plugins array.
- *
- * @example
- * ```ts
- * import { sveltekit } from '@sveltejs/kit/vite';
- * import { bunVitePlugin } from 'svelte-adapter-bun';
- *
- * export default {
- *   plugins: [sveltekit(), bunVitePlugin()]
- * };
- * ```
- */
-export function bunVitePlugin(): Plugin {
-  return {
-    name: 'vite-plugin-bun',
-    config() {
-      return {
-        ssr: {
-          external: ['bun'],
-          noExternal: [],
-        },
-        optimizeDeps: {
-          exclude: ['bun'],
-        },
-        build: {
-          rollupOptions: {
-            external: ['bun', /^bun:/],
-          },
-        },
-        resolve: {
-          conditions: ['bun', 'node'],
-        },
-      };
-    },
-  };
-}
 
 export default function (options: AdapterOptions = {}): Adapter {
   const {

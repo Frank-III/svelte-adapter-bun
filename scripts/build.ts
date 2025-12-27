@@ -8,7 +8,7 @@ await build({
   entrypoints: ['./index.ts'],
   outdir: 'dist',
   packages: 'external',
-  target: 'bun',
+  target: 'node',
   format: 'esm',
   minify: true,
 });

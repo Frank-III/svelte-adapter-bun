@@ -1,4 +1,5 @@
 import type { Adapter, Builder } from '@sveltejs/kit';
+import type { Plugin } from 'vite';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { rolldown } from 'rolldown';
@@ -11,6 +12,45 @@ interface AdapterOptions {
 }
 
 const files = fileURLToPath(new URL('./files', import.meta.url).href);
+
+/**
+ * Vite plugin to handle Bun-specific modules during development and build.
+ * Add this to your vite.config.ts plugins array.
+ *
+ * @example
+ * ```ts
+ * import { sveltekit } from '@sveltejs/kit/vite';
+ * import { bunVitePlugin } from 'svelte-adapter-bun';
+ *
+ * export default {
+ *   plugins: [sveltekit(), bunVitePlugin()]
+ * };
+ * ```
+ */
+export function bunVitePlugin(): Plugin {
+  return {
+    name: 'vite-plugin-bun',
+    config() {
+      return {
+        ssr: {
+          external: ['bun'],
+          noExternal: [],
+        },
+        optimizeDeps: {
+          exclude: ['bun'],
+        },
+        build: {
+          rollupOptions: {
+            external: ['bun', /^bun:/],
+          },
+        },
+        resolve: {
+          conditions: ['bun', 'node'],
+        },
+      };
+    },
+  };
+}
 
 export default function (options: AdapterOptions = {}): Adapter {
   const {

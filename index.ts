@@ -95,7 +95,8 @@ export default function (options: AdapterOptions = {}): Adapter {
           ),
           // Node.js built-in modules
           /^node:/,
-          // Bun built-in modules (bun:sqlite, bun:ffi, etc.)
+          // Bun runtime module and built-in modules (bun:sqlite, bun:ffi, etc.)
+          'bun',
           /^bun:/,
         ],
       });

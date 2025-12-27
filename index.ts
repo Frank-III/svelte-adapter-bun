@@ -9,7 +9,8 @@ interface AdapterOptions {
   serveAssets?: boolean;
 }
 
-const files = Bun.fileURLToPath(new URL('./files', import.meta.url));
+// Lazy evaluation to avoid "Bun is not defined" when importing bunVitePlugin in Node.js
+const getFilesPath = () => Bun.fileURLToPath(new URL('./files', import.meta.url));
 
 /**
  * Vite plugin to handle Bun-specific modules during development and build.
@@ -148,7 +149,7 @@ export default function (options: AdapterOptions = {}): Adapter {
 
       await patchServerWebsocketHandler(`${out}/server/index.js`);
 
-      builder.copy(files, out, {
+      builder.copy(getFilesPath(), out, {
         replace: {
           ENV: './env.js',
           HANDLER: './handler.js',
